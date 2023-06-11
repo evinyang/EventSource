@@ -106,13 +106,16 @@ open class EventSource: NSObject, EventSourceProtocol, URLSessionDataDelegate {
         super.init()
     }
 
-    public func connect(lastEventId: String? = nil) {
+    public func connect(lastEventId: String? = nil, request: ((URLRequest) -> URLRequest)? = nil) {
         eventStreamParser = EventStreamParser()
         readyState = .connecting
-
         let configuration = sessionConfiguration(lastEventId: lastEventId)
         urlSession = URLSession(configuration: configuration, delegate: self, delegateQueue: operationQueue)
-        urlSession?.dataTask(with: url).resume()
+        if let request = request {
+		urlSession?.dataTask(with: request(URLRequest(url: url))).resume()
+        } else {
+		urlSession?.dataTask(with: url).resume()
+        }
     }
 
     public func disconnect() {
