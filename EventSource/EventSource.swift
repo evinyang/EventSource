@@ -33,7 +33,7 @@ public protocol EventSourceProtocol {
     /// Method used to connect to server. It can receive an optional lastEventId indicating the Last-Event-ID
     ///
     /// - Parameter lastEventId: optional value that is going to be added on the request header to server.
-    func connect(lastEventId: String?)
+    func connect(lastEventId: String?, request: ((URLRequest) -> URLRequest)?)
 
     /// Method used to disconnect from server.
     func disconnect()
